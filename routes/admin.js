@@ -1,182 +1,98 @@
-const AdminBro = require("admin-bro");
-const AdminBroExpress = require("admin-bro-expressjs");
-const AdminBroMongoose = require("admin-bro-mongoose");
-const mongoose = require("mongoose");
-const Product = require("../models/product");
-const User = require("../models/user");
-const Order = require("../models/order");
-const Category = require("../models/category");
-AdminBro.registerAdapter(AdminBroMongoose);
-
 const express = require("express");
-const app = express();
+const csrf = require("csurf");
+const Product = require("../models/product");
+const Category = require("../models/category");
+const middleware = require("../middleware");
+const router = express.Router();
+const faker = require("faker");
 
-const adminBro = new AdminBro({
-  databases: [mongoose],
-  rootPath: "/admin",
-  branding: {
-    companyName: "BestBags",
-    logo: "/images/shop-icon.png",
-    softwareBrothers: false,
-  },
-  resources: [
-    {
-      resource: Product,
-      options: {
-        parent: {
-          name: "Admin Content",
-          icon: "InventoryManagement",
-        },
-        properties: {
-          description: {
-            type: "richtext",
-            isVisible: { list: false, filter: true, show: true, edit: true },
-          },
-          _id: {
-            isVisible: { list: false, filter: true, show: true, edit: false },
-          },
-          title: {
-            isTitle: true,
-          },
-          price: {
-            type: "number",
-          },
-          imagePath: {
-            isVisible: { list: false, filter: false, show: true, edit: true },
-            components: {
-              show: AdminBro.bundle(
-                "../components/admin-imgPath-component.jsx"
-              ),
-            },
-          },
-        },
-      },
-    },
-    {
-      resource: User,
-      options: {
-        parent: {
-          name: "User Content",
-          icon: "User",
-        },
-        properties: {
-          _id: {
-            isVisible: { list: false, filter: true, show: true, edit: false },
-          },
-          username: {
-            isTitle: true,
-          },
-        },
-      },
-    },
-    {
-      resource: Order,
-      options: {
-        parent: {
-          name: "User Content",
-          icon: "User",
-        },
-        properties: {
-          user: {
-            isTitle: true,
-          },
-          _id: {
-            isVisible: { list: false, filter: true, show: true, edit: false },
-          },
-          paymentId: {
-            isVisible: { list: false, filter: true, show: true, edit: false },
-          },
-          address: {
-            isVisible: { list: false, filter: true, show: true, edit: false },
-          },
-          createdAt: {
-            isVisible: { list: true, filter: true, show: true, edit: false },
-          },
-          cart: {
-            isVisible: { list: false, filter: false, show: true, edit: false },
-            components: {
-              show: AdminBro.bundle("../components/admin-order-component.jsx"),
-            },
-          },
-          "cart.items": {
-            isVisible: {
-              list: false,
-              filter: false,
-              show: false,
-              edit: false,
-            },
-          },
-          "cart.totalQty": {
-            isVisible: {
-              list: false,
-              filter: false,
-              show: false,
-              edit: false,
-            },
-          },
-          "cart.totalCost": {
-            isVisible: {
-              list: false,
-              filter: false,
-              show: false,
-              edit: false,
-            },
-          },
-        },
-      },
-    },
-    {
-      resource: Category,
-      options: {
-        parent: {
-          name: "Admin Content",
-          icon: "User",
-        },
-        properties: {
-          _id: {
-            isVisible: { list: false, filter: true, show: true, edit: false },
-          },
-          slug: {
-            isVisible: { list: false, filter: false, show: false, edit: false },
-          },
-          title: {
-            isTitle: true,
-          },
-        },
-      },
-    },
-  ],
-  locale: {
-    translations: {
-      labels: {
-        loginWelcome: "Admin Panel Login",
-      },
-      messages: {
-        loginWelcome:
-          "Please enter your credentials to log in and manage your website contents",
-      },
-    },
-  },
-  dashboard: {
-    component: AdminBro.bundle("../components/admin-dashboard-component.jsx"),
-  },
+const csrfProtection = csrf();
+router.use(csrfProtection);
+
+router.get("/", middleware.isAdminLoggedIn, async (req, res) => {
+  res.redirect("/admin/new")
 });
 
-const ADMIN = {
-  email: "admin@gmail.com",
-  password: "password",
-  admin: true,
-};
+router.get("/new", middleware.isAdminLoggedIn, async (req, res) => {
+  res.render("admin/new", { pageName: "Admin - Add Product", csrfToken: req.csrfToken(), });
+});
 
-const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
-  authenticate: async (email, password) => {
-    if (ADMIN.password === password && ADMIN.email === email) {
-      return ADMIN;
-    }
-    return null;
-  },
-  cookieName: "adminCookieName",
-  cookiePassword: "adminCookiePassword",
+router.post("/new", middleware.isAdminLoggedIn, async (req, res) => {
+  try {
+    const category = await Category.findOne({ title: req.body.category });
+    const product = new Product({
+      productCode: faker.helpers.replaceSymbolWithNumber("####-##########"),
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      manufacturer: req.body.manufacturer,
+      available: req.body.available === "available",
+      deleted: false,
+      category: category._id,
+      imagePath: "afd",
+    });
+    product.save(async (err, newProduct) => {
+      if (err) {
+        console.log(err);
+        return res.redirect("/");
+      }
+      req.flash("success", "Product successfully added");
+      res.redirect("/");
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+  }
+});
+
+router.get("/edit/:id", middleware.isAdminLoggedIn, async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findById(productId).populate("category");
+    // const category = await Category.findById(product.category);
+    res.render("admin/edit", { pageName: "Admin - Update Product", product, csrfToken: req.csrfToken(), });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+  }
+});
+
+router.post("/edit", middleware.isAdminLoggedIn, async (req, res) => {
+  try {
+    const product = await Product.findById(req.body.productId);
+    const category = await Category.findOne({ title: req.body.category });
+    product.title = req.body.title;
+    product.description = req.body.description;
+    product.price = req.body.price;
+    product.manufacturer = req.body.manufacturer;
+    product.category = category._id;
+    product.available = req.body.available === "available";
+    product.save(async (err, newProduct) => {
+      if (err) {
+        console.log(err);
+        return res.redirect("/");
+      }
+      req.flash("success", "Product successfully updated");
+      res.redirect("/");
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+  }
+});
+
+router.get("/delete/:id", middleware.isAdminLoggedIn, async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    product.deleted = true;
+    product.save()
+    req.flash("success", "Product successfully deleted");
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+  }
 });
 
 module.exports = router;

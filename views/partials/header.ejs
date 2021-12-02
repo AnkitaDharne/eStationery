@@ -3,7 +3,7 @@
 
 <head>
   <% if (pageName) { %>
-    <title>BestBags | <%= pageName %>
+    <title>eStationery | <%= pageName %>
     </title>
     <%} else {%>
       <title>Shopping Cart</title>
@@ -27,10 +27,6 @@
         <link rel="stylesheet" href="/stylesheets/style.css" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <!-- Mapbox -->
-        <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
-        <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -56,8 +52,8 @@
           <ul>
             <% if (login && currentUser.admin) { %>
               <li>
-                <a href="/admin/">
-                  Admin Portal
+                <a href="/admin/new/" class="btn button-style btn-sm mr-2">
+                  Add Products
                 </a>
               </li>
               <% }%>
@@ -80,7 +76,7 @@
                       <i class="fas fa-user"></i> Welcome <%=currentUser.username%>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="/user/profile">User Account</a>
+                      <a class="dropdown-item" href="/user/profile">Your Orders</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="/user/logout">Logout</a>
                     </div>

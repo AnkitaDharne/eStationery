@@ -35,7 +35,7 @@ async function seedDB() {
   await seedCateg("Glue");
   await seedCateg("Folders");
   await seedCateg("Markers");
-  
+
   await closeDB();
 }
 

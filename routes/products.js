@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
   const perPage = 8;
   let page = parseInt(req.query.page) || 1;
   try {
-    const products = await Product.find({})
+    const products = await Product.find({ deleted: false, })
       .sort("-createdAt")
       .skip(perPage * page - perPage)
       .limit(perPage)
@@ -45,6 +45,7 @@ router.get("/search", async (req, res) => {
   try {
     const products = await Product.find({
       title: { $regex: req.query.search, $options: "i" },
+      deleted: false,
     })
       .sort("-createdAt")
       .skip(perPage * page - perPage)
@@ -53,6 +54,7 @@ router.get("/search", async (req, res) => {
       .exec();
     const count = await Product.count({
       title: { $regex: req.query.search, $options: "i" },
+      deleted: false,
     });
     res.render("shop/index", {
       pageName: "Search Results",
@@ -78,13 +80,13 @@ router.get("/:slug", async (req, res) => {
   let page = parseInt(req.query.page) || 1;
   try {
     const foundCategory = await Category.findOne({ slug: req.params.slug });
-    const allProducts = await Product.find({ category: foundCategory.id })
+    const allProducts = await Product.find({ category: foundCategory.id, deleted: false, })
       .sort("-createdAt")
       .skip(perPage * page - perPage)
       .limit(perPage)
       .populate("category");
 
-    const count = await Product.count({ category: foundCategory.id });
+    const count = await Product.count({ category: foundCategory.id, deleted: false, });
 
     res.render("shop/index", {
       pageName: foundCategory.title,
@@ -108,7 +110,7 @@ router.get("/:slug/:id", async (req, res) => {
   const successMsg = req.flash("success")[0];
   const errorMsg = req.flash("error")[0];
   try {
-    const product = await Product.findById(req.params.id).populate("category");
+    const product = await Product.findOne({ _id: req.params.id, deleted: false, }).populate("category");
     res.render("shop/product", {
       pageName: product.title,
       product,

@@ -15,6 +15,10 @@ const productSchema = Schema({
     type: String,
     required: true,
   },
+  image: {
+    data: Buffer,
+    contentType: String
+  },
   description: {
     type: String,
     required: true,

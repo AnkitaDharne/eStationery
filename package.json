@@ -9,9 +9,6 @@
   "author": "Maryam Aljanabi",
   "license": "MIT",
   "dependencies": {
-    "admin-bro": "^2.3.1",
-    "admin-bro-expressjs": "^2.0.5",
-    "admin-bro-mongoose": "^0.5.2",
     "bcrypt-nodejs": "0.0.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^3.2.0",
@@ -27,7 +24,6 @@
     "express-validator": "^6.4.1",
     "faker": "^4.1.0",
     "http-errors": "~1.6.3",
-    "mapbox-gl": "^1.10.1",
     "moment": "^2.25.3",
     "mongoose": "^5.9.11",
     "mongoose-aggregate-paginate-v2": "^1.0.4",

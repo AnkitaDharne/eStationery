@@ -44,6 +44,7 @@ a:hover,
   display: flex;
   justify-content: center;
   color: var(--black);
+  border-bottom: 1px solid var(--dark-blue);
 }
 
 .search-container {
@@ -149,7 +150,7 @@ a:hover,
 }
 
 /* HOME PAGE */
-
+/* 
 .circle-img {
   object-fit: cover;
   width: 200px;
@@ -189,7 +190,7 @@ hr.gradient-style {
     rgba(0, 0, 0, 0)
   );
   margin: 1em auto;
-}
+} */
 
 /* PRODUCTS INDEX PAGE */
 

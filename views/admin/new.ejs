@@ -1,0 +1,61 @@
+<%- include ../partials/header %>
+  <div class="container">
+    <h2 class="my-4">Add New Product</h2>
+
+    <form action="/admin/new" method="POST">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Title" required />
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" name="category" required>
+          <option value="" disabled selected>Choose a Category</option>
+          <% if (categories) { %>
+            <% categories.forEach( category=> { %>
+              <option>
+                <%=category.title%>
+              </option>
+              <% }) %>
+                <% } %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" class="form-control" placeholder="Description" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <input type="text" name="manufacturer" class="form-control" placeholder="Manufacturer" required />
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" name="price" class="form-control" placeholder="Price" required />
+      </div>
+      <div class="form-group">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="available" id="availability1" value="available" checked>
+          <label class="form-check-label" for="availability1">
+            <span class="is-available text-center mx-1">In Stock</span>
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="available" id="availability2" value="not available">
+          <label class="form-check-label" for="availability2">
+            <span class="is-not-available text-center mx-1">Sold Out</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="product-image" class="mr-3">Upload Product Image </label>
+        <input type="file" id="product-image" name="product-image" accept="image/*" required>
+      </div>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <div class="form-group">
+        <button type="submit" class="btn btn-info">Save</button> </button>
+        <a href="/" class="btn btn-danger">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <%- include ../partials/footer %>

@@ -21,10 +21,6 @@ connectDB();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// admin route
-const adminRouter = require("./routes/admin");
-app.use("/admin", adminRouter);
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -85,10 +81,10 @@ app.use(function (req, res, next) {
 const indexRouter = require("./routes/index");
 const productsRouter = require("./routes/products");
 const usersRouter = require("./routes/user");
-const pagesRouter = require("./routes/pages");
+const adminRouter = require("./routes/admin");
 app.use("/products", productsRouter);
 app.use("/user", usersRouter);
-app.use("/pages", pagesRouter);
+app.use("/admin", adminRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler

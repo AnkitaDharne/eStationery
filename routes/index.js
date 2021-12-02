@@ -1,8 +1,6 @@
 const express = require("express");
 const csrf = require("csurf");
-const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 const Product = require("../models/product");
-const Category = require("../models/category");
 const Cart = require("../models/cart");
 const Order = require("../models/order");
 const middleware = require("../middleware");
@@ -14,45 +12,7 @@ router.use(csrfProtection);
 
 // GET: home page
 router.get("/", async (req, res) => {
-  const successMsg = req.flash("success")[0];
-  const errorMsg = req.flash("error")[0];
-  const perPage = 8;
-  let page = parseInt(req.query.page) || 1;
-  try {
-    const products = await Product.find({})
-      .sort("-createdAt")
-      .skip(perPage * page - perPage)
-      .limit(perPage)
-      .populate("category");
-
-    const count = await Product.count();
-
-    res.render("shop/index", {
-      pageName: "All Products",
-      products,
-      successMsg,
-      errorMsg,
-      current: page,
-      breadcrumbs: null,
-      home: "/products/?",
-      pages: Math.ceil(count / perPage),
-    });
-  } catch (error) {
-    console.log(error);
-    res.redirect("/");
-  }
-});
-
-router.get("/admin-portal", async (req, res) => {
-  try {
-    const products = await Product.find({})
-      .sort("-createdAt")
-      .populate("category");
-    res.render("admin-portal/index", { pageName: "Admin Portal", products });
-  } catch (error) {
-    console.log(error);
-    res.redirect("/");
-  }
+  res.redirect("/products/")
 });
 
 // GET: add a product to the shopping cart when "Add to cart" button is pressed
