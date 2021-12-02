@@ -26,6 +26,10 @@ passport.use(
         if (user) {
           return done(null, false, { message: "Email already exists" });
         }
+        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+        if (!strongPassword.test(password)) {
+          return done(null, false, { message: "Password is not strong enough" });
+        }
         if (password != req.body.password2) {
           return done(null, false, { message: "Passwords must match" });
         }

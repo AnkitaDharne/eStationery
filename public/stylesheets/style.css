@@ -121,8 +121,6 @@ a:hover,
   line-height: 18px;
   color: #575756;
   background-color: transparent;
-  /*         background-image: url(http://mihaeltomic.com/codepen/input-search/ic_search_black_24px.svg); */
-
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: 18px 18px;
@@ -148,49 +146,6 @@ a:hover,
   border-radius: 0;
   background-position: 100% center;
 }
-
-/* HOME PAGE */
-/* 
-.circle-img {
-  object-fit: cover;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  -webkit-transition: all 0.2s linear;
-}
-.circle-img:hover {
-  transform: scale(1.1);
-  -ms-transform: scale(1.1);
-  -webkit-transform: scale(1.1);
-  box-shadow: 5px 5px 5px var(--dark-gray);
-}
-
-.fa-chevron-circle-right {
-  font-size: 50px;
-  color: var(--dark-blue);
-  margin-top: 1.5em;
-  border-radius: 55%;
-  box-shadow: 5px 5px 5px var(--dark-gray);
-  transition: all 0.2s linear;
-}
-
-.fa-chevron-circle-right:hover {
-  transform: scale(1.4);
-}
-
-hr.gradient-style {
-  border: 0;
-  height: 1px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.75),
-    rgba(0, 0, 0, 0)
-  );
-  margin: 1em auto;
-} */
 
 /* PRODUCTS INDEX PAGE */
 
@@ -248,25 +203,6 @@ hr.gradient-style {
   object-fit: cover;
   border: 1px solid #c2c2c2;
   border-radius: 5px;
-}
-
-/* BANNER IMAGE */
-.hero-container {
-  display: grid;
-  overflow: hidden;
-}
-
-.hero-image,
-.hero-text {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.hero-text {
-  color: white;
-  text-align: center;
-  padding-top: 10%;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 }
 
 /* SINGLE PRODUCT PAGE */
@@ -344,7 +280,7 @@ hr.gradient-style {
   padding-top: 0.3em;
 }
 
-/* FOOTER */
+/* HEADER & FOOTER */
 
 ul {
   list-style: none;
@@ -375,12 +311,6 @@ ul {
   background-color: var(--black);
   padding: 1em 1em 0.2em 1em;
   border-bottom: 5px var(--dark-blue) solid;
-}
-.bottom-footer {
-  font-size: 14px;
-  padding: 1em 1.5em;
-  color: var(--ivory);
-  background-color: #1a1a1a;
 }
 
 #page-container {
@@ -440,9 +370,6 @@ footer {
   .controls-top .fa {
     font-size: 12px;
   }
-  .hero-text h1 {
-    font-size: 25px;
-  }
 }
 
 /* SM SCREENS */
@@ -460,9 +387,6 @@ footer {
   }
   .white-links {
     margin-left: 0px;
-  }
-  .hero-text {
-    padding-top: 8%;
   }
 }
 
