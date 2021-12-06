@@ -3,10 +3,23 @@ const csrf = require("csurf");
 const Product = require("../models/product");
 const Category = require("../models/category");
 const middleware = require("../middleware");
+const path = require('path')
 const router = express.Router();
 const faker = require("faker");
-
+const multer = require('multer');//new 
+const { image } = require("faker");
+//const upload = multer({dest: 'uploads/'});
 const csrfProtection = csrf();
+const storage = multer.diskStorage({//new 
+  destination:(req, file, cb)=>{//new 
+    cb(null, 'public/images/')//new 
+  },//new 
+  filename: (req, file, cb)=> {//new 
+    console.log(req.body.title)//new 
+    cb(null,req.body.title+req.body.manufacturer+".jpg")//new 
+  }//new 
+})//new 
+const upload = multer({storage: storage})//new 
 router.use(csrfProtection);
 
 router.get("/", middleware.isAdminLoggedIn, async (req, res) => {
@@ -17,7 +30,7 @@ router.get("/new", middleware.isAdminLoggedIn, async (req, res) => {
   res.render("admin/new", { pageName: "Admin - Add Product", csrfToken: req.csrfToken(), });
 });
 
-router.post("/new", middleware.isAdminLoggedIn, async (req, res) => {
+router.post("/new",upload.single('productImage'),middleware.isAdminLoggedIn,async (req, res) => {
   try {
     const category = await Category.findOne({ title: req.body.category });
     const product = new Product({
@@ -29,7 +42,7 @@ router.post("/new", middleware.isAdminLoggedIn, async (req, res) => {
       available: req.body.available === "available",
       deleted: false,
       category: category._id,
-      imagePath: "afd",
+      imagePath: "/images/"+req.body.title+req.body.manufacturer+".jpg",
     });
     product.save(async (err, newProduct) => {
       if (err) {
